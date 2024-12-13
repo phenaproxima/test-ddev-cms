@@ -10,6 +10,9 @@
 # Drupal's interactive installer in the browser.
 ###
 
+# Abort this entire script if any one command fails.
+set -e
+
 # If debugging, output every line of this script as interpreted by the shell.
 if [ -n "$DEBUG" ]; then
   set -x
@@ -20,7 +23,7 @@ BACKUP_DIR=.ddev/drupal-cms-backup
 # move files we shouldn't.
 BACKUP_FILES="composer.json .drupal-cms launch-drupal-cms.sh README.md web"
 # To test with an alternate COMPOSER_CREATE
-# export COMPOSER_SOURCE='drupal/cms --stability=dev --repository={"type":"vcs","url":"https://github.com/phenaproxima/test-ddev-cms.git"}'
+# export COMPOSER_CREATE='drupal/cms --stability=dev --repository={"type":"vcs","url":"https://github.com/phenaproxima/test-ddev-cms.git"}'
 COMPOSER_CREATE=${COMPOSER_CREATE:-drupal/cms --stability="RC"}
 # The document root is hard-coded to `web` to match what's in `composer.json`.
 DOCROOT=web
@@ -69,7 +72,7 @@ if [ ! -f ".ddev/config.yaml" ]; then
   trap 'restore_backup' ERR
   ddev composer create $COMPOSER_CREATE
   # We don't need the backed up files anymore.
-    trap - ERR
+  trap - ERR
   rm -r -f $BACKUP_DIR
 fi
 
@@ -80,7 +83,7 @@ if [ ! -f "$DOCROOT/index.php" ]; then
 fi
 
 # If we skipped the `composer create` because we found a project already here,
-# check if it's running by doing `ddev drush --version`, and if it's not running,
+# check if it's running by doing `ddev php --version`, and if it's not running,
 # start it.
 (set +e; ddev php --version >/dev/null 2>&1) || ddev start
 
