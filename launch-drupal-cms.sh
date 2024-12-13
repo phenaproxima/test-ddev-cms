@@ -82,7 +82,7 @@ fi
 # If we skipped the `composer create` because we found a project already here,
 # check if it's running by doing `ddev drush --version`, and if it's not running,
 # start it.
-(set +e; ddev drush --version >/dev/null 2>&1) || ddev start
+(set +e; ddev php --version >/dev/null 2>&1) || ddev start
 
 # All done...let's get to Drupalin'.
 ddev launch
