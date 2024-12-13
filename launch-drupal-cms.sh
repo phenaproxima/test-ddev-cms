@@ -67,7 +67,7 @@ if [ ! -f ".ddev/config.yaml" ]; then
 
   # Restore the backed up files if DDEV fails to create the project.
   trap 'restore_backup' ERR
-  ddev composer create "$COMPOSER_CREATE"
+  ddev composer create $COMPOSER_CREATE
   # We don't need the backed up files anymore.
     trap - ERR
   rm -r -f $BACKUP_DIR
